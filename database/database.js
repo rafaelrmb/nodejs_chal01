@@ -38,12 +38,16 @@ export class Database {
   }
 
   findById(table, id) {
+    if (!this.#database[table]) {
+      return {};
+    }
+
     return this.#database[table].find((row) => {
       return row.id === id;
     });
   }
 
-  deleteTask(table, itemToRemove) {
+  delete(table, itemToRemove) {
     const itemsSet = new Set(this.#database[table]);
 
     itemsSet.delete(itemToRemove);
@@ -51,5 +55,26 @@ export class Database {
     this.#persist();
 
     return this.#database[table];
+  }
+
+  update(table, itemToUpdate, updatedItem) {
+    const tableData = this.#database[table];
+    const itemIndex = this.#database[table].findIndex(
+      (el) => el.id === itemToUpdate.id
+    );
+
+    const item = tableData[itemIndex];
+
+    const newItem = {
+      ...item,
+      ...updatedItem,
+      updated_at: new Date(),
+    };
+
+    this.#database[table][itemIndex] = newItem;
+
+    this.#persist();
+
+    return newItem;
   }
 }

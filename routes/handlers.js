@@ -49,8 +49,28 @@ export const deleteTaskHandler = (req, res, data) => {
   const foundTask = findItemById('tasks', data);
 
   if (foundTask) {
-    db.deleteTask('tasks', foundTask);
+    db.delete('tasks', foundTask);
     return res.writeHead(204, { 'Content-type': 'application/json' }).end();
+  }
+
+  returnNotFoundItem(res);
+};
+
+export const updateTaskHandler = (req, res, data) => {
+  const foundTask = findItemById('tasks', data);
+
+  const { title, description } = data.payload;
+  const updatedTask = {
+    title: title ?? foundTask.title,
+    description: description ?? foundTask.description,
+  };
+
+  if (foundTask) {
+    const changedDbResult = db.update('tasks', foundTask, updatedTask);
+
+    return res
+      .writeHead(200, { 'Content-type': 'application/json' })
+      .end(JSON.stringify(changedDbResult));
   }
 
   returnNotFoundItem(res);

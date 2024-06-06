@@ -2,6 +2,7 @@ import {
   createTaskHandler,
   deleteTaskHandler,
   getTasksHandler,
+  updateTaskHandler,
 } from './handlers.js';
 
 export const routes = [
@@ -19,5 +20,10 @@ export const routes = [
     method: 'DELETE',
     path: 'tasks',
     handler: deleteTaskHandler,
+  },
+  {
+    method: 'PUT',
+    path: 'tasks',
+    handler: updateTaskHandler,
   },
 ];
