@@ -3,12 +3,12 @@ import { createTaskHandler, getTasksHandler } from './handlers.js';
 export const routes = [
   {
     method: 'GET',
-    path: '/tasks',
+    path: 'tasks',
     handler: getTasksHandler,
   },
   {
     method: 'POST',
-    path: '/tasks',
+    path: 'tasks',
     handler: createTaskHandler,
   },
 ];
