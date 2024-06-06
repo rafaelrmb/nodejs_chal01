@@ -21,13 +21,19 @@ export class Database {
 
   insert(table, data) {
     if (data) {
-      Array.isArray(this.#database[table])
-        ? this.#database[table].push[data]
-        : (this.#database[table] = [data]);
+      if (Array.isArray(this.#database[table])) {
+        this.#database[table].push(data);
+      } else {
+        this.#database[table] = [data];
+      }
     }
 
     this.#persist();
 
     return data ?? [];
+  }
+
+  findAll(table) {
+    return this.#database[table] ?? [];
   }
 }
