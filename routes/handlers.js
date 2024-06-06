@@ -4,7 +4,7 @@ import { Database } from '../database/database.js';
 const db = new Database();
 
 export const getTasksHandler = (req, res, data) => {
-  const id = data.params.id;
+  const { id } = data.params;
   let tasks = [];
 
   if (id) {
@@ -46,15 +46,23 @@ export const createTaskHandler = (req, res, data) => {
 };
 
 export const deleteTaskHandler = (req, res, data) => {
-  const { id } = data.params;
-  const foundTask = db.findById('tasks', id);
+  const foundTask = findItemById('tasks', data);
 
   if (foundTask) {
     db.deleteTask('tasks', foundTask);
     return res.writeHead(204, { 'Content-type': 'application/json' }).end();
   }
 
+  returnNotFoundItem(res);
+};
+
+const findItemById = (table, data) => {
+  const { id } = data.params;
+  return db.findById(table, id);
+};
+
+const returnNotFoundItem = (res) => {
   return res
     .writeHead(404, { 'Content-type': 'application/json' })
-    .end(JSON.stringify({ message: 'No task find with the id', id }));
+    .end(JSON.stringify({ message: 'No resources found with the id' }));
 };
