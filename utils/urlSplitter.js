@@ -1,5 +1,5 @@
-export const urlSplitter = (req, res) => {
-  const urlParts = req.url.split('/').filter((el) => {
+export const urlSplitter = (url) => {
+  const urlParts = url.split('/').filter((el) => {
     return el !== '';
   });
 
