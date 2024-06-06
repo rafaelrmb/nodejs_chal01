@@ -60,12 +60,13 @@ export const updateTaskHandler = (req, res, data) => {
   const foundTask = findItemById('tasks', data);
 
   const { title, description } = data.payload;
-  const updatedTask = {
-    title: title ?? foundTask.title,
-    description: description ?? foundTask.description,
-  };
 
   if (foundTask) {
+    const updatedTask = {
+      title: title ?? foundTask.title,
+      description: description ?? foundTask.description,
+    };
+
     const changedDbResult = db.update('tasks', foundTask, updatedTask);
 
     return res
