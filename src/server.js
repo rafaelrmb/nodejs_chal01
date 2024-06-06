@@ -1,4 +1,5 @@
 import http from 'node:http';
+import { jsonParse } from '../middleware/parser.js';
 import { routes } from '../routes/routes.js';
 
 const PORT = 3333;
@@ -8,17 +9,7 @@ const server = http.createServer(async (req, res) => {
     return route.method === method && route.path === url;
   });
 
-  const buffer = [];
-
-  for await (const chunk of req) {
-    buffer.push(chunk);
-  }
-
-  try {
-    req.body = JSON.parse(buffer);
-  } catch {
-    req.body = null;
-  }
+  await jsonParse(req, res);
 
   if (route) {
     const data = {
