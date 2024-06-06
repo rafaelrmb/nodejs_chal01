@@ -1,4 +1,8 @@
-import { createTaskHandler, getTasksHandler } from './handlers.js';
+import {
+  createTaskHandler,
+  deleteTaskHandler,
+  getTasksHandler,
+} from './handlers.js';
 
 export const routes = [
   {
@@ -10,5 +14,10 @@ export const routes = [
     method: 'POST',
     path: 'tasks',
     handler: createTaskHandler,
+  },
+  {
+    method: 'DELETE',
+    path: 'tasks',
+    handler: deleteTaskHandler,
   },
 ];

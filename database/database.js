@@ -42,4 +42,14 @@ export class Database {
       return row.id === id;
     });
   }
+
+  deleteTask(table, itemToRemove) {
+    const itemsSet = new Set(this.#database[table]);
+
+    itemsSet.delete(itemToRemove);
+    this.#database[table] = [...itemsSet];
+    this.#persist();
+
+    return this.#database[table];
+  }
 }

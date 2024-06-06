@@ -44,3 +44,17 @@ export const createTaskHandler = (req, res, data) => {
     JSON.stringify({ message: 'Please send the correct data to the server.' })
   );
 };
+
+export const deleteTaskHandler = (req, res, data) => {
+  const { id } = data.params;
+  const foundTask = db.findById('tasks', id);
+
+  if (foundTask) {
+    db.deleteTask('tasks', foundTask);
+    return res.writeHead(204, { 'Content-type': 'application/json' }).end();
+  }
+
+  return res
+    .writeHead(404, { 'Content-type': 'application/json' })
+    .end(JSON.stringify({ message: 'No task find with the id', id }));
+};
