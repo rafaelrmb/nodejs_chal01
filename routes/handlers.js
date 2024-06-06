@@ -3,10 +3,16 @@ import { Database } from '../database/database.js';
 
 const db = new Database();
 
+export const getTasksHandler = (req, res, data) => {
+  const tasks = db.findAll('tasks');
+
+  return res
+    .writeHead(200, { 'Content-type': 'application/json' })
+    .end(JSON.stringify(tasks));
+};
+
 export const createTaskHandler = (req, res, data) => {
-  console.log(data);
   const { title, description } = data.payload;
-  const { url } = req;
 
   if (title && description) {
     const newTask = {
@@ -19,7 +25,10 @@ export const createTaskHandler = (req, res, data) => {
     };
 
     db.insert('tasks', newTask);
-    res.writeHead(201, { 'Content-type': 'application/json' }).end();
+
+    res
+      .writeHead(201, { 'Content-type': 'application/json' })
+      .end(JSON.stringify(newTask));
     return newTask;
   }
 
