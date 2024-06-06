@@ -14,7 +14,11 @@ const server = http.createServer(async (req, res) => {
     buffer.push(chunk);
   }
 
-  req.body = JSON.parse(buffer);
+  try {
+    req.body = JSON.parse(buffer);
+  } catch {
+    req.body = null;
+  }
 
   if (route) {
     const data = {
