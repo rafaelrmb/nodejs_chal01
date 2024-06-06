@@ -36,4 +36,10 @@ export class Database {
   findAll(table) {
     return this.#database[table] ?? [];
   }
+
+  findById(table, id) {
+    return this.#database[table].find((row) => {
+      return row.id === id;
+    });
+  }
 }

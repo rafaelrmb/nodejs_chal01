@@ -1,25 +1,31 @@
 import http from 'node:http';
 import { jsonParse } from '../middleware/parser.js';
 import { routes } from '../routes/routes.js';
+import { urlSplitter } from '../utils/urlSplitter.js';
 
 const PORT = 3333;
 const server = http.createServer(async (req, res) => {
   const { method, url } = req;
+
+  const [routePath, id] = urlSplitter(req, res);
+
   const route = routes.find((route) => {
-    return route.method === method && route.path === url;
+    return route.method === method && route.path === routePath;
   });
 
   await jsonParse(req, res);
 
   if (route) {
     const data = {
-      url,
+      url: routePath,
       method,
+      params: { id } ?? {},
       headers: req.headers,
       payload: req.body,
     };
 
     route.handler(req, res, data);
+    return;
   }
 
   const notFound = (req, res) => {
@@ -27,7 +33,7 @@ const server = http.createServer(async (req, res) => {
     res.end(JSON.stringify({ message: 'The provided path was not found.' }));
   };
 
-  return notFound;
+  return notFound(req, res);
 });
 
 server.listen(PORT, () => {

@@ -4,7 +4,14 @@ import { Database } from '../database/database.js';
 const db = new Database();
 
 export const getTasksHandler = (req, res, data) => {
-  const tasks = db.findAll('tasks');
+  const id = data.params.id;
+  let tasks = [];
+
+  if (id) {
+    tasks = db.findById('tasks', id);
+  } else {
+    tasks = db.findAll('tasks');
+  }
 
   return res
     .writeHead(200, { 'Content-type': 'application/json' })
