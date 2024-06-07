@@ -7,7 +7,11 @@ const PORT = 3333;
 const server = http.createServer(async (req, res) => {
   const { method, url } = req;
 
-  const [routePath, id] = urlSplitter(url);
+  let [routePath, id, action] = urlSplitter(url);
+
+  if (action) {
+    routePath = routePath + '/' + action;
+  }
 
   const route = routes.find((route) => {
     return route.method === method && route.path === routePath;
