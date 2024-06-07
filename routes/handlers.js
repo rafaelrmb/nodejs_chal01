@@ -33,16 +33,22 @@ export const createTaskHandler = (req, res, data) => {
 
     db.insert('tasks', newTask);
 
-    res
-      .writeHead(201, { 'Content-type': 'application/json' })
-      .end(JSON.stringify(newTask));
+    // Ensure headers are not already sent
+    if (!res.headersSent) {
+      res
+        .writeHead(201, { 'Content-Type': 'application/json' })
+        .end(JSON.stringify(newTask));
+    }
     return newTask;
   }
 
-  res.writeHead(400, { 'Content-type': 'application/json' });
-  res.end(
-    JSON.stringify({ message: 'Please send the correct data to the server.' })
-  );
+  // Ensure headers are not already sent
+  if (!res.headersSent) {
+    res.writeHead(400, { 'Content-Type': 'application/json' });
+    res.end(
+      JSON.stringify({ message: 'Please send the correct data to the server.' })
+    );
+  }
 };
 
 export const deleteTaskHandler = (req, res, data) => {

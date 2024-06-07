@@ -1,6 +1,7 @@
 import http from 'node:http';
 import { jsonParse } from '../middleware/parser.js';
 import { routes } from '../routes/routes.js';
+import { processFile } from '../utils/csvParser.js';
 import { urlSplitter } from '../utils/urlSplitter.js';
 
 const PORT = 3333;
@@ -11,6 +12,11 @@ const server = http.createServer(async (req, res) => {
 
   if (action) {
     routePath = routePath + '/' + action;
+  }
+
+  if (method === 'POST' && routePath === 'tasks-csv') {
+    await processFile(req, res);
+    return;
   }
 
   const route = routes.find((route) => {
