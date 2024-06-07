@@ -58,12 +58,7 @@ export class Database {
   }
 
   update(table, itemToUpdate, updatedItem) {
-    const tableData = this.#database[table];
-    const itemIndex = this.#database[table].findIndex(
-      (el) => el.id === itemToUpdate.id
-    );
-
-    const item = tableData[itemIndex];
+    const { item, itemIndex } = this.#getItemById(table, itemToUpdate);
 
     const newItem = {
       ...item,
@@ -76,5 +71,29 @@ export class Database {
     this.#persist();
 
     return newItem;
+  }
+
+  patch(table, itemToUpdate) {
+    const { item, itemIndex } = this.#getItemById(table, itemToUpdate);
+
+    const currentItem = this.#database[table][itemIndex];
+
+    currentItem.completed_at = currentItem.completed_at ? null : new Date();
+
+    this.#persist();
+
+    return this.#database[table][itemIndex];
+  }
+
+  #getItemById(table, itemToUpdate) {
+    const tableData = this.#database[table];
+    const itemIndex = this.#database[table].findIndex(
+      (el) => el.id === itemToUpdate.id
+    );
+
+    return {
+      item: tableData[itemIndex],
+      itemIndex,
+    };
   }
 }

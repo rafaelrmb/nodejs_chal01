@@ -2,6 +2,7 @@ import {
   createTaskHandler,
   deleteTaskHandler,
   getTasksHandler,
+  markTaskAsCompleted,
   updateTaskHandler,
 } from './handlers.js';
 
@@ -25,5 +26,10 @@ export const routes = [
     method: 'PUT',
     path: 'tasks',
     handler: updateTaskHandler,
+  },
+  {
+    method: 'PATCH',
+    path: 'tasks/complete',
+    handler: markTaskAsCompleted,
   },
 ];

@@ -77,6 +77,20 @@ export const updateTaskHandler = (req, res, data) => {
   returnNotFoundItem(res);
 };
 
+export const markTaskAsCompleted = (req, res, data) => {
+  const foundTask = findItemById('tasks', data);
+
+  if (foundTask) {
+    const completedItem = db.patch('tasks', foundTask);
+
+    return res
+      .writeHead(200, { 'Content-type': 'application/json' })
+      .end(JSON.stringify(completedItem));
+  }
+
+  returnNotFoundItem(res);
+};
+
 const findItemById = (table, data) => {
   const { id } = data.params;
   return db.findById(table, id);
